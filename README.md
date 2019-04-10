@@ -83,7 +83,10 @@ CREATE TABLE IF NOT EXISTS song_data_by_session (session_id INT,
         song_length DOUBLE,
         PRIMARY KEY ((session_id, session_item_number)))
 ```
-In this case <b> session_id </b> and <b> session_item_number </b> are the ``COMPOUND PARTITION KEY``
+ In this case <b>session_id</b> and <b>session_item_number</b> are enough to
+ make a record unique for our request.
+ Our complete ``PRIMARY KEY`` is composed by <b>session_id</b>, <b>session_item_number </b>
+ 
 ``` SQL
 SELECT artist_name, song_title, song_length
  FROM song_data_by_session
@@ -101,7 +104,10 @@ CREATE TABLE IF NOT EXISTS song_user_data_by_user_and_session_data (user_id INT,
         user_last_name TEXT,
         PRIMARY KEY ((user_id, session_id), session_item_number))
 ```
-In this case <b> user_id </b> and <b> session_id </b>  are the ``COMPOUND PARTITION KEY`` and <b> session_item_number </b> <br> is the ``CLUSTERING KEY``
+In this case <b>user_id</b> and <b>session_id</b> are the ``COMPOUND PARTITION KEY``  
+this allows us to have a unique ``PRIMARY KEY`` for our query, but for this request we have to 
+order by session_item_number but not to query on that so we have to declare <b>session_item_number</b> as ``CLUSTERING KEY``.  
+Our complete PRIMARY KEY is composed by <b>user_id</b>, <b>session_id</b>, <b>session_item_number</b>
 ``` SQL
 SELECT artist_name, song_title, user_first_name, user_last_name
  FROM song_user_data_by_user_and_session_data
@@ -115,7 +121,13 @@ CREATE TABLE IF NOT EXISTS user_data_by_song_title (song_title TEXT, user_id INT
         user_last_name TEXT,
         PRIMARY KEY ((song_title), user_id))
 ```
- In this case <b> song_title </b> is the ``PRIMARY KEY`` and <b> user_id </b> <br> is the ``CLUSTERING KEY``
+In this case <b>song_title</b> is the ``PARTITION KEY`` and <b>user_id </b>
+is the ``CLUSTERING KEY``, the request asks to retreive the user name 
+by song title, so we have to set <b>song_title</b> as ``PARTITION KEY``, but 
+more users can listen the same song so we may have many ``INSERT`` with the 
+same key, Cassandra overwrites data with the same key so we need to add a ``CLUSTERING KEY`` 
+because we need to have an unique record but not to query on that. 
+Our complete ``PRIMARY KEY`` is composed by <b>song_title</b>, <b>user_id</b>
 ``` SQL
 SELECT user_first_name, user_last_name
  FROM user_data_by_song_title
