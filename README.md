@@ -92,10 +92,14 @@ SELECT artist_name, song_title, song_length
 
 <I> Query 2: Give me only the following: name of artist, song (sorted by itemInSession)  <br> and user (first and last name) for userid = 10, sessionid = 182 </I>
 ``` SQL
-CREATE TABLE IF NOT EXISTS user_data_by_song_title (song_title TEXT, user_id INT,
+CREATE TABLE IF NOT EXISTS song_user_data_by_user_and_session_data (user_id INT,
+        session_id INT,
+        session_item_number INT,
+        artist_name TEXT,
+        song_title TEXT,
         user_first_name TEXT,
         user_last_name TEXT,
-        PRIMARY KEY ((song_title), user_id))
+        PRIMARY KEY ((user_id, session_id), session_item_number))
 ```
 In this case <b> user_id </b> and <b> session_id </b>  are the ``COMPOUND PARTITION KEY`` and <b> session_item_number </b> <br> is the ``CLUSTERING KEY``
 ``` SQL
@@ -106,17 +110,9 @@ SELECT artist_name, song_title, user_first_name, user_last_name
 
 <I> Query 3: Give me every user name (first and last) in my music app history who listened <br> to the song 'All Hands Against His Own' </I>
 ``` SQL
-CREATE TABLE IF NOT EXISTS user_data_by_song_title (artist_name TEXT,
+CREATE TABLE IF NOT EXISTS user_data_by_song_title (song_title TEXT, user_id INT,
         user_first_name TEXT,
-        gender TEXT,
-        session_item_number INT,
         user_last_name TEXT,
-        song_length DOUBLE,
-        account_level TEXT,
-        user_location TEXT,
-        session_id INT,
-        song_title TEXT,
-        user_id INT,
         PRIMARY KEY ((song_title), user_id))
 ```
  In this case <b> song_title </b> is the ``PRIMARY KEY`` and <b> user_id </b> <br> is the ``CLUSTERING KEY``
