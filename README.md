@@ -76,17 +76,11 @@ means that the resource is a folder:
 <I> Query 1:  Give me the artist, song title and song's length in the music app history that was heard <br> during
  sessionId = 338 and itemInSession = 4 </I>
 ``` SQL
-CREATE TABLE IF NOT EXISTS song_data_by_session (artist_name TEXT,
-        user_first_name TEXT,
-        gender TEXT,
+CREATE TABLE IF NOT EXISTS song_data_by_session (session_id INT,
         session_item_number INT,
-        user_last_name TEXT,
-        song_length DOUBLE,
-        account_level TEXT,
-        user_location TEXT,
-        session_id INT,
+        artist_name TEXT,
         song_title TEXT,
-        user_id INT,
+        song_length DOUBLE,
         PRIMARY KEY ((session_id, session_item_number)))
 ```
 In this case <b> session_id </b> and <b> session_item_number </b> are the ``COMPOUND PARTITION KEY``
@@ -98,18 +92,10 @@ SELECT artist_name, song_title, song_length
 
 <I> Query 2: Give me only the following: name of artist, song (sorted by itemInSession)  <br> and user (first and last name) for userid = 10, sessionid = 182 </I>
 ``` SQL
-CREATE TABLE IF NOT EXISTS song_user_data_by_user_and_session_data (artist_name TEXT,
+CREATE TABLE IF NOT EXISTS user_data_by_song_title (song_title TEXT, user_id INT,
         user_first_name TEXT,
-        gender TEXT,
-        session_item_number INT,
         user_last_name TEXT,
-        song_length DOUBLE,
-        account_level TEXT,
-        user_location TEXT,
-        session_id INT,
-        song_title TEXT,
-        user_id INT,
-        PRIMARY KEY ((user_id, session_id), session_item_number))
+        PRIMARY KEY ((song_title), user_id))
 ```
 In this case <b> user_id </b> and <b> session_id </b>  are the ``COMPOUND PARTITION KEY`` and <b> session_item_number </b> <br> is the ``CLUSTERING KEY``
 ``` SQL
