@@ -1,6 +1,6 @@
 # Project 2: Song Play Analysis With NoSQL
 
-[![Project In Review](https://img.shields.io/badge/project-review-yellow.svg)](https://img.shields.io/badge/project-review-yellow.svg)
+[![Project passed](https://img.shields.io/badge/project-passed-success.svg)](https://img.shields.io/badge/project-passed-success.svg)
 
 ## Summary
 * [Preamble](#Preamble)
